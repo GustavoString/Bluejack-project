@@ -134,7 +134,158 @@ public class Bluejack{
             }
         }
         //finished creating player hands at this point
+        CardDeck[] playertable=new CardDeck[9];
+        for (int i = 0; i < playertable.length; i++) {
+            playertable[i].CardType=0;
+        }
+        CardDeck[] bottable=new CardDeck[9];
+        for (int i = 0; i < bottable.length; i++) {
+            bottable[i].CardType=0;
+        }
+        int PlayerWins=0;
+        int BotWins=0;
+        for(int TurnCounter=0; TurnCounter<3; TurnCounter++){
+            //player goes first for all 3 turns
+            //first turn
+            
+            //second turn
+            //third turn
+        }
+        if(PlayerWins>BotWins){
+            //player wins here
+        }
+        else if(PlayerWins<BotWins){
+            //bot wins here
+        }
+        else{
+            //both sides draw draw here
+        }
     }
     
-    
+    public static void gamePrinter(CardDeck[] playerdeck, CardDeck[] botdeck, CardDeck[] bottable, CardDeck[] playertable){
+        //printing computer hand after this point
+        System.out.print("Computer Hand:    ");
+        for (int i = 0; i < botdeck.length; i++) {
+            if(botdeck[i].CardType!=0) System.out.print("X ");
+            else System.out.print("O ");
+        }
+        System.out.println();
+        //printing bot table after this point
+        System.out.print("Computer Board:   ");
+        boolean isEmpty=true;
+        int amountOfCardsOnTable=0;
+        for (int i = 0; i < bottable.length; i++) {
+            if(bottable[i].CardType!=0){
+                isEmpty=false;
+                amountOfCardsOnTable++;
+            }
+        }
+        if(isEmpty){
+            System.out.print("Empty");
+        }
+        else{
+            for (int i = 0; i < amountOfCardsOnTable; i++) {
+                switch(bottable[i].CardColour){
+                    case 1:
+                        if(bottable[i].CardValue>0) System.out.print("(B)+"+bottable[i].CardValue+" ");
+                        else System.out.print("(B)"+bottable[i].CardValue+" ");
+                        break;
+                    case 2:
+                        if(bottable[i].CardValue>0) System.out.print("(G)+"+bottable[i].CardValue+" ");
+                        else System.out.print("(G)"+bottable[i].CardValue+" ");
+                        break;
+                    case 3:
+                        if(bottable[i].CardValue>0) System.out.print("(R)+"+bottable[i].CardValue+" ");
+                        else System.out.print("(R)"+bottable[i].CardValue+" ");
+                        break;
+                    case 4:
+                        if(bottable[i].CardValue>0) System.out.print("(Y)+"+bottable[i].CardValue+" ");
+                        else System.out.print("(Y)"+bottable[i].CardValue+" ");
+                        break;
+                    default:
+                    System.out.println("Something went wrong at the bottable cardcolour switch.");
+                    break;
+                }
+            }
+        }
+        System.out.println();
+        //printing player table after this point
+        System.out.print("Player Board:   ");
+        isEmpty=true;
+        amountOfCardsOnTable=0;
+        for (int i = 0; i < playertable.length; i++) {
+            if(playertable[i].CardType!=0){
+                isEmpty=false;
+                amountOfCardsOnTable++;
+            }
+        }
+        if(isEmpty){
+            System.out.print("Empty");
+        }
+        else{
+            for (int i = 0; i < amountOfCardsOnTable; i++) {
+                switch(playertable[i].CardColour){
+                    case 1:
+                        if(playertable[i].CardValue>0) System.out.print("(B)+"+playertable[i].CardValue+" ");
+                        else System.out.print("(B)"+playertable[i].CardValue+" ");
+                        break;
+                    case 2:
+                        if(playertable[i].CardValue>0) System.out.print("(G)+"+playertable[i].CardValue+" ");
+                        else System.out.print("(G)"+playertable[i].CardValue+" ");
+                        break;
+                    case 3:
+                        if(playertable[i].CardValue>0) System.out.print("(R)+"+playertable[i].CardValue+" ");
+                        else System.out.print("(R)"+playertable[i].CardValue+" ");
+                        break;
+                    case 4:
+                        if(playertable[i].CardValue>0) System.out.print("(Y)+"+playertable[i].CardValue+" ");
+                        else System.out.print("(Y)"+playertable[i].CardValue+" ");
+                        break;
+                    default:
+                        System.out.println("Something went wrong at the playertable cardcolour switch.");
+                        break;
+                }
+            }
+        }
+        System.out.println();
+        //printing player hand after this point
+        for (int i = 0; i < playerdeck.length; i++) {
+            switch(playerdeck[i].CardType){
+                case 1:
+                    switch(playerdeck[i].CardColour){
+                        case 1:
+                            if(playerdeck[i].CardValue>0) System.out.print("(B)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print("(B)"+playerdeck[i].CardValue+" ");
+                            break;
+                        case 2:
+                            if(playerdeck[i].CardValue>0) System.out.print("(G)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print("(G)"+playerdeck[i].CardValue+" ");
+                            break;
+                        case 3:
+                            if(playerdeck[i].CardValue>0) System.out.print("(R)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print("(R)"+playerdeck[i].CardValue+" ");
+                            break;
+                        case 4:
+                            if(playerdeck[i].CardValue>0) System.out.print("(Y)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print("(Y)"+playerdeck[i].CardValue+" ");
+                            break;
+                        default:
+                            System.out.println("Something went wrong at the playerdeck cardcolour switch for the player hand printer.");
+                            break;
+                    }
+                    break;
+                case 2:
+                    System.out.print("+/- ");
+                    break;
+                case 3:
+                    System.out.print("x2 ");
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Something went wrong at the player hand playerdeck card type switch");
+                    break;
+            }
+        }
+    }
 }
