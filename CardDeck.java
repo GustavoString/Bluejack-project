@@ -2,27 +2,14 @@ import java.util.Random;
 
 public class CardDeck {
     int CardType;
-    //signed=1, flip=2, double=3, no card=0
+    //signed=1, flip=2, double=3, no card(empty)=0
     int CardColour;
     //blue=1, green=2, red=3, yellow=4
     int CardValue;
     //only used for signed cards
 
-    public CardDeck(int type){
-        //constructor for flip and double cards
-        CardType=type;
-    }
+    public CardDeck(){
 
-    public CardDeck(int type, int colour){
-        CardType=type;
-        CardColour=colour;
-    }
-
-    public CardDeck(int type, int colour, int value){
-        //constructor for signed cards
-        CardType=type;
-        CardColour=colour;
-        CardValue=value;
     }
 
     public static CardDeck[] shuffle(CardDeck[] unshuffled) {
@@ -41,7 +28,9 @@ public class CardDeck {
 
     public static CardDeck[] generateGameDeck() {
         CardDeck[] GameDeck=new CardDeck[40];
+
         for (int i = 0; i < GameDeck.length; i++) {
+            GameDeck[i]=new CardDeck();
             GameDeck[i].CardType=1;
             if(i<10){
                 GameDeck[i].CardColour=1;

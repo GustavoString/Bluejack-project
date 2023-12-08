@@ -13,8 +13,14 @@ public class Bluejack{
         //creating the player deck (hand)
         //ge erating player deck after this point
         CardDeck[] playerdeck=new CardDeck[4];
+        for (int i = 0; i < playerdeck.length; i++) {
+            playerdeck[i]=new CardDeck();
+        }
         int j=0;
         CardDeck[] playerdeckUnchosen=new CardDeck[10];
+        for (int i = 0; i < playerdeckUnchosen.length; i++) {
+            playerdeckUnchosen[i]=new CardDeck();
+        }
         for (int i = gamedeck.length-1; i>gamedeck.length-6  ; i--) {
             playerdeckUnchosen[j]=gamedeck[i];
             j++;
@@ -46,36 +52,31 @@ public class Bluejack{
                 else playerdeckUnchosen[i].CardValue=-1*valueRandom;
             }
         }
-        int[] randomselectors=new int[4];
-        for (int i = 0; i < randomselectors.length; i++) {
-            randomselectors[i]=r1.nextInt(10);
-            if(i>0){
-                for (int k = 0; k < i; k++) {
-                    while(randomselectors[k]==randomselectors[i]){
-                        randomselectors[k]=r1.nextInt(10);
-                    }
-                }
+        //selecting 4 cards at random from playerdeckunchosen
+        for(int u = 0; u < 4; u++){
+            int randomSelector=r1.nextInt(10-u);
+            playerdeck[u]=playerdeckUnchosen[randomSelector];
+        
+            //shift the remaining cards in playerdeckUnchosen
+            for(int i=randomSelector; i<playerdeckUnchosen.length-1; i++){
+                playerdeckUnchosen[i]=playerdeckUnchosen[i+1];
             }
         }
-        for (int i = 0; i < randomselectors.length; i++) {
-            playerdeck[i]=playerdeckUnchosen[randomselectors[i]];
-        }
-        for (int i = 0; i < randomselectors.length; i++) {
-            if(randomselectors[i]<=5){
-                gamedeck[gamedeck.length-1-i].CardType=0;
-            }
-        }
+        //shifting the cards in gamedeck if they are empty to avoid empty spaces in the deck
         for (int i = 0; i < gamedeck.length-1; i++) {
-            if(gamedeck[i].CardType==0) {
+            if(gamedeck[i].CardType==0){
                 gamedeck[i]=gamedeck[i+1];
             }
         }
-        //IMPORTANT!! after this point you removed the top and bottom 5 cards but that is wrong as they all may not have been given to the user/bot.
-        //write something that figures out which ones have been given to the user / bot and remove ONLY those.
-        
         //creating bot deck
         CardDeck[] botdeck=new CardDeck[4];
+        for (int i = 0; i < botdeck.length; i++) {
+            botdeck[i]=new CardDeck();
+        }
         CardDeck[] botdeckUnchosen=new CardDeck[10];
+        for (int i = 0; i < botdeckUnchosen.length; i++) {
+            botdeckUnchosen[i]=new CardDeck();
+        }
         //do the same fix for bot deck aswell
         for (j = 0; j < 5; j++) {
             botdeckUnchosen[j]=gamedeck[j];
@@ -98,7 +99,7 @@ public class Bluejack{
                 else botdeckUnchosen[i].CardType=3;
             }
             else{
-                int signRandom=r1.nextInt(2);
+                int signRandom=r1.nextInt(1,3);
                 int valueRandom=r1.nextInt(1,7);
                 int colourRandom=r1.nextInt(1,5);
                 botdeckUnchosen[i].CardColour=colourRandom;
@@ -107,49 +108,106 @@ public class Bluejack{
                 else botdeckUnchosen[i].CardValue=-1*valueRandom;
             }
         }
-        for (int i = 0; i < randomselectors.length; i++) {
-            randomselectors[i]=-1;
-        }
-        for (int i = 0; i < randomselectors.length; i++) {
-            randomselectors[i]=r1.nextInt(10);
-            if(i>0){
-                for (int k = 0; k < i; k++) {
-                    while(randomselectors[k]==randomselectors[i]){
-                        randomselectors[k]=r1.nextInt(10);
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < randomselectors.length; i++) {
-            botdeck[i]=botdeckUnchosen[randomselectors[i]];
-        }
-        for (int i = 0; i < randomselectors.length; i++) {
-            if(randomselectors[i]<=5){
-                gamedeck[i].CardType=0;
+        //selecting 4 cards at random from botdeckUnchosen
+        for(int u = 0; u < 4; u++){
+            int randomSelector=r1.nextInt(10-u);
+            botdeck[u]=botdeckUnchosen[randomSelector];
+        
+            //shift the remaining cards in botdeckUnchosen
+            for(int i=randomSelector; i<botdeckUnchosen.length-1; i++){
+                botdeckUnchosen[i]=botdeckUnchosen[i+1];
             }
         }
         for (int i = 0; i < gamedeck.length-1; i++) {
-            if(gamedeck[i].CardType==0) {
+            if(gamedeck[i].CardType==0){
                 gamedeck[i]=gamedeck[i+1];
             }
         }
         //finished creating player hands at this point
         CardDeck[] playertable=new CardDeck[9];
         for (int i = 0; i < playertable.length; i++) {
+            playertable[i]=new CardDeck();
+        }
+        for (int i = 0; i < playertable.length; i++) {
             playertable[i].CardType=0;
         }
         CardDeck[] bottable=new CardDeck[9];
+        for (int i = 0; i < bottable.length; i++) {
+            bottable[i]=new CardDeck();
+        }
         for (int i = 0; i < bottable.length; i++) {
             bottable[i].CardType=0;
         }
         int PlayerWins=0;
         int BotWins=0;
-        for(int TurnCounter=0; TurnCounter<3; TurnCounter++){
+        int cardsOnPlayerTable=0;
+        playertable[cardsOnPlayerTable]=gamedeck[0];
+        cardsOnPlayerTable++;
+        for (int i = 0; i < gamedeck.length-1; i++) {
+            gamedeck[i]=gamedeck[i+1];
+        }
+        for(int RoundCounter=0; RoundCounter<3; RoundCounter++){
             //player goes first for all 3 turns
-            //first turn
-            
-            //second turn
-            //third turn
+            boolean isEnded=false;
+            boolean BotStand=false;
+            while(!(isEnded)){
+                gamePrinter(playerdeck, botdeck, bottable, playertable);
+                int sum=0;
+                for (int i = 0; i < playertable.length; i++) {
+                    sum=sum+playertable[i].CardValue;
+                }
+                if(sum>20){
+                    System.out.println("Bust! Computer wins this round.");
+                    BotWins++;
+                    break;
+                }
+                System.out.print("\nTo end your turn enter 10.\nTo stand enter 0.\nTo pull a card from the deck to your board enter -1.\nOr to play one of the cards in your hand enter 1, 2, 3 or 4:");
+                int playerinput=scan1.nextInt();
+                if(playerinput==0){
+                    isEnded=true;
+                }
+                else if(playerinput==-1){
+                    playertable[cardsOnPlayerTable]=gamedeck[0];
+                    cardsOnPlayerTable++;
+                    for (int i = 0; i < gamedeck.length-1; i++) {
+                        gamedeck[i]=gamedeck[i+1];
+                    }
+                }
+                else if(playerinput==10){
+                    //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
+                    //if the bot chooses to stand here don't forget to make BotStand=true
+
+                }
+                else if(playerinput==1||playerinput==2||playerinput==3||playerinput==4){
+                    switch(playerdeck[playerinput-1].CardType){
+                        case 1:
+                            //problem with moving signed cards from playerdeck to player table here.
+                            playertable[cardsOnPlayerTable]=playerdeck[playerinput-1];
+                            cardsOnPlayerTable++;
+                            playerdeck[playerinput-1].CardType=0;
+                            break;
+                        case 2:
+                            playertable[cardsOnPlayerTable].CardValue=playertable[cardsOnPlayerTable].CardValue*-1;
+                            playerdeck[playerinput-1].CardType=0;
+                            break;
+                        case 3:
+                            playertable[cardsOnPlayerTable].CardValue=playertable[cardsOnPlayerTable].CardValue*2;
+                            playerdeck[playerinput-1].CardType=0;
+                            break;
+                        case 0:
+                            System.out.println("You should know better than playing a card that doesn't exist.");
+                            break;
+                        default:
+                            System.out.println("Something went wrong at the playerdeck switch.");
+                            break;
+                    }
+                }
+                else System.out.println("Invalid input.");
+            }
+            if(isEnded&&!(BotStand)){
+                //bot plays here
+                //bot only plays here if the player chooses to stand and the bot doesn't choose to stand.
+            }
         }
         if(PlayerWins>BotWins){
             //player wins here
@@ -249,25 +307,26 @@ public class Bluejack{
         }
         System.out.println();
         //printing player hand after this point
+        System.out.print("Player hand:  ");
         for (int i = 0; i < playerdeck.length; i++) {
             switch(playerdeck[i].CardType){
                 case 1:
                     switch(playerdeck[i].CardColour){
                         case 1:
-                            if(playerdeck[i].CardValue>0) System.out.print("(B)+"+playerdeck[i].CardValue+" ");
-                            else System.out.print("(B)"+playerdeck[i].CardValue+" ");
+                            if(playerdeck[i].CardValue>0) System.out.print((i+1)+": (B)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print((i+1)+": (B)"+playerdeck[i].CardValue+" ");
                             break;
                         case 2:
-                            if(playerdeck[i].CardValue>0) System.out.print("(G)+"+playerdeck[i].CardValue+" ");
-                            else System.out.print("(G)"+playerdeck[i].CardValue+" ");
+                            if(playerdeck[i].CardValue>0) System.out.print((i+1)+": (G)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print((i+1)+": (G)"+playerdeck[i].CardValue+" ");
                             break;
                         case 3:
-                            if(playerdeck[i].CardValue>0) System.out.print("(R)+"+playerdeck[i].CardValue+" ");
-                            else System.out.print("(R)"+playerdeck[i].CardValue+" ");
+                            if(playerdeck[i].CardValue>0) System.out.print((i+1)+": (R)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print((i+1)+": (R)"+playerdeck[i].CardValue+" ");
                             break;
                         case 4:
-                            if(playerdeck[i].CardValue>0) System.out.print("(Y)+"+playerdeck[i].CardValue+" ");
-                            else System.out.print("(Y)"+playerdeck[i].CardValue+" ");
+                            if(playerdeck[i].CardValue>0) System.out.print((i+1)+": (Y)+"+playerdeck[i].CardValue+" ");
+                            else System.out.print((i+1)+": (Y)"+playerdeck[i].CardValue+" ");
                             break;
                         default:
                             System.out.println("Something went wrong at the playerdeck cardcolour switch for the player hand printer.");
@@ -287,5 +346,6 @@ public class Bluejack{
                     break;
             }
         }
+        System.out.println();
     }
 }
