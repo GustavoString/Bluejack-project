@@ -219,6 +219,7 @@ public class Bluejack{
                     }
                 }
                 else if(playerinput==10){
+                    //IMPORTANT!!! add in usage of x2 and +/- cards too. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     boolean EndTurn=false;
                     if(BotStand) EndTurn=true;
                     //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
@@ -248,8 +249,32 @@ public class Bluejack{
                             BotStand=true;
                             break;
                         }
+                        boolean is20=false;
+                        int TwentyCardIndex=-1;
+                        //checking to see if any cards make the stack 20 in total.
+                        for (int i = 0; i < botdeck.length; i++) {
+                            if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
+                                TwentyCardIndex=i;
+                                is20=true;
+                                break;
+                            }
+                        }
+                        if(is20){
+                            //making the stack 20 as there is a card that makes it 20.
+                            bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
+                            bottable[cardsOnBotTable].CardType=botdeck[TwentyCardIndex].CardType;
+                            bottable[cardsOnBotTable].CardValue=botdeck[TwentyCardIndex].CardValue;
+                            cardsOnBotTable++;
+                            botdeck[TwentyCardIndex].CardType=0;
+                            BotStand=true;
+                            EndTurn=true;
+                        }
+                        else if(BotSum<=10){
+                            //pull a card from the gamedeck here then see if it's possible for it to be made 20.
+                            
+                        }
                         else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
-                            //if there is a possibility of it going over 20 but it can be corrected by playing a signed card.
+                            //if there is a possibility of the sum going over 20 when a card is pulled but it can be corrected by playing a signed card.
                             //pulling a card from gamedeck
                             bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
                             bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
@@ -279,7 +304,38 @@ public class Bluejack{
                                 bottable[cardsOnBotTable].CardValue=botdeck[MinCardIndex].CardValue;
                                 cardsOnBotTable++;
                                 botdeck[MinCardIndex].CardType=0;
+                                EndTurn=true;
+                                break;
                             }
+                            else{
+                                //checking to see if any cards make the stack 20 in total.
+                                for (int i = 0; i < botdeck.length; i++) {
+                                    if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
+                                        TwentyCardIndex=i;
+                                        is20=true;
+                                        break;
+                                    }
+                                }
+                                if(is20){
+                                    //making the stack 20 as there is a card that makes it 20.
+                                    bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
+                                    bottable[cardsOnBotTable].CardType=botdeck[TwentyCardIndex].CardType;
+                                    bottable[cardsOnBotTable].CardValue=botdeck[TwentyCardIndex].CardValue;
+                                    cardsOnBotTable++;
+                                    botdeck[TwentyCardIndex].CardType=0;
+                                    BotStand=true;
+                                    EndTurn=true;
+                                }
+                                else{
+                                    EndTurn=true;
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            //check to see if there are any x2 or +/- cards and if anything can be done with them.
+                            //if not stand.
+
                         }
                     }
                 }
