@@ -183,16 +183,17 @@ public class Bluejack{
             }
         }
         for(int RoundCounter=0; RoundCounter<3; RoundCounter++){
+            int PlayerSum=0;
+            int BotSum=0;
             //player goes first for all 3 turns
             boolean isEnded=false;
             boolean BotStand=false;
             while(!(isEnded)){
                 gamePrinter(playerdeck, botdeck, bottable, playertable);
-                int sum=0;
                 for (int i = 0; i < playertable.length; i++) {
-                    sum=sum+playertable[i].CardValue;
+                    PlayerSum=PlayerSum+playertable[i].CardValue;
                 }
-                if(sum>20){
+                if(PlayerSum>20){
                     System.out.println("Bust! Computer wins this round.");
                     BotWins++;
                     break;
@@ -218,9 +219,69 @@ public class Bluejack{
                     }
                 }
                 else if(playerinput==10){
+                    boolean EndTurn=false;
+                    if(BotStand) EndTurn=true;
                     //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
                     //if the bot chooses to stand here don't forget to make BotStand=true
-
+                    while(!EndTurn){
+                        for (int i = 0; i < bottable.length; i++) {
+                            BotSum=BotSum+bottable[i].CardValue;
+                        }
+                        int MinCardValue=1000;
+                        int MinCardIndex=-1;
+                        int MaxCardValue=-1000;
+                        int MaxCardIndex=-1;
+                        for (int i = 0; i < botdeck.length; i++) {
+                            if(botdeck[i].CardType==1){
+                                if(botdeck[i].CardValue<MinCardValue){
+                                    MinCardValue=botdeck[i].CardValue;
+                                    MinCardIndex=i;
+                                }
+                                if(botdeck[i].CardValue>MaxCardValue){
+                                    MaxCardValue=botdeck[i].CardValue;
+                                    MaxCardIndex=i;
+                                }
+                            }
+                        }
+                        if(BotSum==20){
+                            EndTurn=true;
+                            BotStand=true;
+                            break;
+                        }
+                        else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
+                            //if there is a possibility of it going over 20 but it can be corrected by playing a signed card.
+                            //pulling a card from gamedeck
+                            bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                            bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                            bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                            cardsOnBotTable++;
+                            gamedeck[0].CardType=0;
+                            for (int l = 0; l < gamedeck.length; l++) {
+                                for (int i = 0; i < gamedeck.length-1; i++) {
+                                    if(gamedeck[i].CardType==0){
+                                        gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                        gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                        gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                        gamedeck[i+1].CardType=0;
+                                    }
+                                }
+                            }
+                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            if(BotSum==20){
+                                BotStand=true;
+                                EndTurn=true;
+                                break;
+                            }
+                            //checking to see if the sum is over 20 and playing the (-) value minimum card if it is
+                            if(BotSum>20){
+                                bottable[cardsOnBotTable].CardColour=botdeck[MinCardIndex].CardColour;
+                                bottable[cardsOnBotTable].CardType=botdeck[MinCardIndex].CardType;
+                                bottable[cardsOnBotTable].CardValue=botdeck[MinCardIndex].CardValue;
+                                cardsOnBotTable++;
+                                botdeck[MinCardIndex].CardType=0;
+                            }
+                        }
+                    }
                 }
                 else if(playerinput==1||playerinput==2||playerinput==3||playerinput==4){
                     switch(playerdeck[playerinput-1].CardType){
