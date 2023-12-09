@@ -151,6 +151,10 @@ public class Bluejack{
             boolean isEnded=false;
             boolean BotStand=false;
             while(!(isEnded)){
+                for (int i = 0; i < playertable.length; i++) {
+                    //added this temporarily for debugging
+                    System.out.println(playertable[i].CardType);
+                }
                 gamePrinter(playerdeck, botdeck, bottable, playertable);
                 int sum=0;
                 for (int i = 0; i < playertable.length; i++) {
@@ -182,8 +186,12 @@ public class Bluejack{
                     switch(playerdeck[playerinput-1].CardType){
                         case 1:
                             //problem with moving signed cards from playerdeck to player table here.
-                            playertable[cardsOnPlayerTable]=playerdeck[playerinput-1];
+                            playertable[cardsOnPlayerTable].CardColour=playerdeck[playerinput-1].CardColour;
+                            playertable[cardsOnPlayerTable].CardType=playerdeck[playerinput-1].CardType;
+                            playertable[cardsOnPlayerTable].CardValue=playerdeck[playerinput-1].CardValue;
                             cardsOnPlayerTable++;
+                            System.out.println("s "+playertable[cardsOnPlayerTable-1].CardValue);
+                            //added this temporarily for debugging
                             playerdeck[playerinput-1].CardType=0;
                             break;
                         case 2:
@@ -270,38 +278,38 @@ public class Bluejack{
         //printing player table after this point
         System.out.print("Player Board:   ");
         isEmpty=true;
-        amountOfCardsOnTable=0;
         for (int i = 0; i < playertable.length; i++) {
             if(playertable[i].CardType!=0){
                 isEmpty=false;
-                amountOfCardsOnTable++;
             }
         }
         if(isEmpty){
             System.out.print("Empty");
         }
         else{
-            for (int i = 0; i < amountOfCardsOnTable; i++) {
-                switch(playertable[i].CardColour){
-                    case 1:
-                        if(playertable[i].CardValue>0) System.out.print("(B)+"+playertable[i].CardValue+" ");
-                        else System.out.print("(B)"+playertable[i].CardValue+" ");
-                        break;
-                    case 2:
-                        if(playertable[i].CardValue>0) System.out.print("(G)+"+playertable[i].CardValue+" ");
-                        else System.out.print("(G)"+playertable[i].CardValue+" ");
-                        break;
-                    case 3:
-                        if(playertable[i].CardValue>0) System.out.print("(R)+"+playertable[i].CardValue+" ");
-                        else System.out.print("(R)"+playertable[i].CardValue+" ");
-                        break;
-                    case 4:
-                        if(playertable[i].CardValue>0) System.out.print("(Y)+"+playertable[i].CardValue+" ");
-                        else System.out.print("(Y)"+playertable[i].CardValue+" ");
-                        break;
-                    default:
-                        System.out.println("Something went wrong at the playertable cardcolour switch.");
-                        break;
+            for (int i = 0; i < playertable.length; i++) {
+                if(playertable[i].CardType!=0){
+                    switch(playertable[i].CardColour){
+                        case 1:
+                            if(playertable[i].CardValue>0) System.out.print("(B)+"+playertable[i].CardValue+" ");
+                            else System.out.print("(B)"+playertable[i].CardValue+" ");
+                            break;
+                        case 2:
+                            if(playertable[i].CardValue>0) System.out.print("(G)+"+playertable[i].CardValue+" ");
+                            else System.out.print("(G)"+playertable[i].CardValue+" ");
+                            break;
+                        case 3:
+                            if(playertable[i].CardValue>0) System.out.print("(R)+"+playertable[i].CardValue+" ");
+                            else System.out.print("(R)"+playertable[i].CardValue+" ");
+                            break;
+                        case 4:
+                            if(playertable[i].CardValue>0) System.out.print("(Y)+"+playertable[i].CardValue+" ");
+                            else System.out.print("(Y)"+playertable[i].CardValue+" ");
+                            break;
+                        default:
+                            System.out.println("Something went wrong at the playertable cardcolour switch.");
+                            break;
+                    }
                 }
             }
         }
