@@ -65,7 +65,10 @@ public class Bluejack{
         //shifting the cards in gamedeck if they are empty to avoid empty spaces in the deck
         for (int i = 0; i < gamedeck.length-1; i++) {
             if(gamedeck[i].CardType==0){
-                gamedeck[i]=gamedeck[i+1];
+                gamedeck[i].CardType=gamedeck[i+1].CardType;
+                gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                gamedeck[i+1].CardType=0;
             }
         }
         //creating bot deck
@@ -118,10 +121,15 @@ public class Bluejack{
                 botdeckUnchosen[i]=botdeckUnchosen[i+1];
             }
         }
-        for (int i = 0; i < gamedeck.length-1; i++) {
+        for (int l = 0; l < gamedeck.length; l++) {
+            for (int i = 0; i < gamedeck.length-1; i++) {
             if(gamedeck[i].CardType==0){
-                gamedeck[i]=gamedeck[i+1];
+                gamedeck[i].CardType=gamedeck[i+1].CardType;
+                gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                gamedeck[i+1].CardType=0;
             }
+        }
         }
         //finished creating player hands at this point
         CardDeck[] playertable=new CardDeck[9];
@@ -140,21 +148,45 @@ public class Bluejack{
         }
         int PlayerWins=0;
         int BotWins=0;
+        //placing first card on player table
         int cardsOnPlayerTable=0;
-        playertable[cardsOnPlayerTable]=gamedeck[0];
+        playertable[cardsOnPlayerTable].CardColour=gamedeck[0].CardColour;
+        playertable[cardsOnPlayerTable].CardType=gamedeck[0].CardType;
+        playertable[cardsOnPlayerTable].CardValue=gamedeck[0].CardValue;
         cardsOnPlayerTable++;
-        for (int i = 0; i < gamedeck.length-1; i++) {
-            gamedeck[i]=gamedeck[i+1];
+        gamedeck[0].CardType=0;
+        for (int l = 0; l < gamedeck.length; l++) {
+            for (int i = 0; i < gamedeck.length-1; i++) {
+                if(gamedeck[i].CardType==0){
+                    gamedeck[i].CardType=gamedeck[i+1].CardType;
+                    gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                    gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                    gamedeck[i+1].CardType=0;
+                }
+            }
+        }
+        //placing first card on bot table
+        int cardsOnBotTable=0;
+        bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+        bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+        bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+        cardsOnBotTable++;
+        gamedeck[0].CardType=0;
+        for (int l = 0; l < gamedeck.length; l++) {
+            for (int i = 0; i < gamedeck.length-1; i++) {
+                if(gamedeck[i].CardType==0){
+                    gamedeck[i].CardType=gamedeck[i+1].CardType;
+                    gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                    gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                    gamedeck[i+1].CardType=0;
+                }
+            }
         }
         for(int RoundCounter=0; RoundCounter<3; RoundCounter++){
             //player goes first for all 3 turns
             boolean isEnded=false;
             boolean BotStand=false;
             while(!(isEnded)){
-                for (int i = 0; i < playertable.length; i++) {
-                    //added this temporarily for debugging
-                    System.out.println(playertable[i].CardType);
-                }
                 gamePrinter(playerdeck, botdeck, bottable, playertable);
                 int sum=0;
                 for (int i = 0; i < playertable.length; i++) {
@@ -173,8 +205,16 @@ public class Bluejack{
                 else if(playerinput==-1){
                     playertable[cardsOnPlayerTable]=gamedeck[0];
                     cardsOnPlayerTable++;
-                    for (int i = 0; i < gamedeck.length-1; i++) {
-                        gamedeck[i]=gamedeck[i+1];
+                    gamedeck[0].CardType=0;
+                    for (int l = 0; l < gamedeck.length; l++) {
+                        for (int i = 0; i < gamedeck.length-1; i++) {
+                            if(gamedeck[i].CardType==0){
+                                gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                gamedeck[i+1].CardType=0;
+                            }
+                        }
                     }
                 }
                 else if(playerinput==10){
@@ -185,13 +225,10 @@ public class Bluejack{
                 else if(playerinput==1||playerinput==2||playerinput==3||playerinput==4){
                     switch(playerdeck[playerinput-1].CardType){
                         case 1:
-                            //problem with moving signed cards from playerdeck to player table here.
                             playertable[cardsOnPlayerTable].CardColour=playerdeck[playerinput-1].CardColour;
                             playertable[cardsOnPlayerTable].CardType=playerdeck[playerinput-1].CardType;
                             playertable[cardsOnPlayerTable].CardValue=playerdeck[playerinput-1].CardValue;
                             cardsOnPlayerTable++;
-                            System.out.println("s "+playertable[cardsOnPlayerTable-1].CardValue);
-                            //added this temporarily for debugging
                             playerdeck[playerinput-1].CardType=0;
                             break;
                         case 2:
@@ -215,6 +252,7 @@ public class Bluejack{
             if(isEnded&&!(BotStand)){
                 //bot plays here
                 //bot only plays here if the player chooses to stand and the bot doesn't choose to stand.
+
             }
         }
         if(PlayerWins>BotWins){
