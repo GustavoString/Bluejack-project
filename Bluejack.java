@@ -204,7 +204,9 @@ public class Bluejack{
                     isEnded=true;
                 }
                 else if(playerinput==-1){
-                    playertable[cardsOnPlayerTable]=gamedeck[0];
+                    playertable[cardsOnPlayerTable].CardType=gamedeck[0].CardType;
+                    playertable[cardsOnPlayerTable].CardColour=gamedeck[0].CardColour;
+                    playertable[cardsOnPlayerTable].CardValue=gamedeck[0].CardValue;
                     cardsOnPlayerTable++;
                     gamedeck[0].CardType=0;
                     for (int l = 0; l < gamedeck.length; l++) {
@@ -220,6 +222,7 @@ public class Bluejack{
                 }
                 else if(playerinput==10){
                     //IMPORTANT!!! add in usage of x2 and +/- cards too. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //add the usage of +/- cards !!!!!!!!!!!!!!!!
                     boolean EndTurn=false;
                     if(BotStand) EndTurn=true;
                     //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
@@ -232,6 +235,8 @@ public class Bluejack{
                         int MinCardIndex=-1;
                         int MaxCardValue=-1000;
                         int MaxCardIndex=-1;
+                        boolean IsDoubleCard=false;
+                        boolean IsFlipCard=false;
                         for (int i = 0; i < botdeck.length; i++) {
                             if(botdeck[i].CardType==1){
                                 if(botdeck[i].CardValue<MinCardValue){
@@ -243,6 +248,8 @@ public class Bluejack{
                                     MaxCardIndex=i;
                                 }
                             }
+                            if(botdeck[i].CardType==2) IsFlipCard=true;
+                            if(botdeck[i].CardType==3) IsDoubleCard=true;
                         }
                         if(BotSum==20){
                             EndTurn=true;
@@ -268,10 +275,38 @@ public class Bluejack{
                             botdeck[TwentyCardIndex].CardType=0;
                             BotStand=true;
                             EndTurn=true;
+                            break;
+                        }
+                        else if(IsDoubleCard&&bottable[cardsOnBotTable-1].CardValue+BotSum==20){
+                            //checking to see if there is a double card and if there is, if it can make the total 20.
+                            bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*2;
+                            BotStand=true;
+                            EndTurn=true;
+                            break;
                         }
                         else if(BotSum<=10){
                             //pull a card from the gamedeck here then see if it's possible for it to be made 20.
-                            
+                            bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                            bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                            bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                            cardsOnBotTable++;
+                            gamedeck[0].CardType=0;
+                            for (int l = 0; l < gamedeck.length; l++) {
+                                for (int i = 0; i < gamedeck.length-1; i++) {
+                                    if(gamedeck[i].CardType==0){
+                                        gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                        gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                        gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                        gamedeck[i+1].CardType=0;
+                                    }
+                                }
+                            }
+                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            if(BotSum==20){
+                                BotStand=true;
+                                EndTurn=true;
+                                break;
+                            }
                         }
                         else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
                             //if there is a possibility of the sum going over 20 when a card is pulled but it can be corrected by playing a signed card.
@@ -371,6 +406,37 @@ public class Bluejack{
                 //bot only plays here if the player chooses to stand and the bot doesn't choose to stand.
 
             }
+            if(BotSum==20&&PlayerSum==20){
+                //draw
+            }
+            else if(BotSum==20&&PlayerSum!=20){
+                BotWins++;
+            }
+            else if(BotSum!=20&&PlayerSum==20){
+                PlayerWins++;
+            }
+            else if(BotSum>20&&PlayerSum<=20){
+                PlayerWins++;
+            }
+            else if(PlayerSum>20&&BotSum<=20){
+                BotWins++;
+            }
+            else if(BotSum<20&&PlayerSum<20){
+                BotSum=20-BotSum;
+                PlayerSum=20-PlayerSum;
+                if(PlayerSum<BotSum){
+                    PlayerWins++;
+                }
+                else if(PlayerSum>BotSum){
+                    BotWins++;
+                }
+                else{
+                    //draw
+                }
+            }
+            else{
+                //both are over 20 so draw
+            }
         }
         if(PlayerWins>BotWins){
             //player wins here
@@ -379,7 +445,7 @@ public class Bluejack{
             //bot wins here
         }
         else{
-            //both sides draw draw here
+            //both sides draw here
         }
     }
     
