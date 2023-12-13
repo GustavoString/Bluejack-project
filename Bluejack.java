@@ -1,3 +1,5 @@
+import java.nio.file.Paths;
+import java.util.Formatter;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -6,6 +8,10 @@ public class Bluejack{
     public static void main(String[] args) {
         Random r1=new Random(System.currentTimeMillis());
         Scanner scan1=new Scanner(System.in);
+        System.out.print("Please enter your name:");
+        String PlayerName=scan1.nextLine();
+        System.out.print("Please enter the current date in the following format;\nDD.MM.YY(include the dots):");
+        String date=scan1.nextLine();
         //creating the game deck
         CardDeck[] gamedeck=new CardDeck[40];
         gamedeck=CardDeck.generateGameDeck();
@@ -231,6 +237,9 @@ public class Bluejack{
                     if(isAllBlueAnd20(playertable)){
                         //player autowins game here
                         System.out.println("Player Wins!");
+                        gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 1);
+                        scan1.close();
+                        return;
                     }
                     //IMPORTANT!!! add in usage of x2 and +/- cards too. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //add the usage of +/- cards !!!!!!!!!!!!!!!!
@@ -460,14 +469,16 @@ public class Bluejack{
                 else System.out.println("Invalid input.");
             }
             if(is20(playertable)&&!isAllBlueAnd20(playertable)&&!is20(bottable)){
-                PlayerWins++;
-                System.out.println("Player wins this round.");
+                
             }
             else if(isEnded&&!(BotStand)){
                 //add the all blue checker below
                 if(isAllBlueAnd20(playertable)){
                     //player autowins game here
                     System.out.println("Player Wins!");
+                    gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 1);
+                    scan1.close();
+                    return;
                 }
                 //bot plays here
                 //bot only plays here if the player chooses to stand and the bot doesn't choose to stand.
@@ -672,10 +683,16 @@ public class Bluejack{
             if(isAllBlueAnd20(bottable)&&!isAllBlueAnd20(playertable)){
                 //bot autowins game here
                 System.out.println("Bot Wins!");
+                gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 2);
+                scan1.close();
+                return;
             }
             else if(isAllBlueAnd20(playertable)&&!isAllBlueAnd20(bottable)){
                 //player auto wins here
                 System.out.println("Player Wins!");
+                gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 1);
+                scan1.close();
+                return;
             }
             PlayerSum=sumCalculator(playertable);
             BotSum=sumCalculator(bottable);
@@ -723,14 +740,17 @@ public class Bluejack{
         if(PlayerWins>BotWins){
             //player wins here
             System.out.println("Player Wins!");
+            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 0);
         }
         else if(PlayerWins<BotWins){
             //bot wins here
             System.out.println("Bot wins!");
+            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 0);
         }
         else{
             //both sides draw here
             System.out.println("Draw!");
+            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 0);
         }
         scan1.close();
     }
@@ -910,5 +930,77 @@ public class Bluejack{
             }
         }
         return sum;
+    }
+
+    public static void gameHistoryRecorder(int PlayerWins, int BotWins, String PlayerName, String date, int Bluejack){
+        //isBlueJack=1 for player bluejack, 2 for bot bluejack, 0 for no bluejack.
+        String s="";
+        if(Bluejack==1){
+            s=PlayerName+": Bluejack (made a total of 20 by only using blue cards) - Computer: "+BotWins+", "+date;
+        }   
+        else if(Bluejack==0){
+            s=PlayerName+": "+PlayerWins+" - Computer: "+BotWins+", "+date;
+        }
+        else if(Bluejack==2){
+            s=PlayerName+": "+PlayerWins+" - Computer: Bluejack (made a total of 20 by only using blue cards), "+date;
+        }
+        else{
+            System.out.println("There is an error somewhere to do with the calling of the gameHistoryRecorder function. You entered the Bluejack int value wrong somewhere in the code and should fix it.");
+            return;
+        }
+        Scanner reader=null;
+        Formatter f=null;
+        try {
+            reader=new Scanner(Paths.get("GameHistory.txt"));
+            int AmountOfGames=0;
+            while(reader.hasNextLine()){
+                AmountOfGames++;
+            }
+            if(AmountOfGames>0){
+                String[] t=new String[AmountOfGames];
+                for (int i = 0; i < t.length; i++) {
+                    t[i]=reader.nextLine();
+                }
+                if(t.length>=10){
+                    String[] a=new String[10];
+                    for (int i = 0; i < a.length-1; i++) {
+                        a[i]=t[i+1];
+                    }
+                    a[9]=s;
+                    String lastString="";
+                    for (int i = 0; i < a.length; i++) {
+                        lastString=lastString+a[i]+"\n";
+                    }
+                    f=new Formatter("GameHistory.txt");
+                    f.format(lastString);
+                }
+                else{
+                    String[] a=new String[t.length+1];
+                    for (int i = 0; i < t.length; i++) {
+                        a[i]=t[i];
+                    }
+                    a[a.length-1]=s;
+                    String lastString="";
+                    for (int i = 0; i < a.length; i++) {
+                        lastString=lastString+a[i]+"\n";
+                    }
+                    f=new Formatter("GameHistory.txt");
+                    f.format(lastString);
+                }
+            }
+            else{
+                f=new Formatter("GameHistory.txt");
+                f.format(s);
+            }
+        } catch (Exception e) {
+            System.out.println("There was an issue in the gameHistoryRecorder function.\n"+e);
+        } finally{
+            if(reader!=null){
+                reader.close();
+            }
+            if(f!=null){
+                f.close();
+            }
+        }
     }
 }
