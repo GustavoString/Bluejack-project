@@ -9,7 +9,6 @@ public class CardDeck {
     //only used for signed cards
 
     public CardDeck(){
-
     }
 
     public static CardDeck[] shuffle(CardDeck[] unshuffled) {
