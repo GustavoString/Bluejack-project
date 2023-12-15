@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.nio.file.Paths;
 import java.util.Formatter;
 import java.util.Random;
@@ -469,7 +470,8 @@ public class Bluejack{
                 else System.out.println("Invalid input.");
             }
             if(is20(playertable)&&!isAllBlueAnd20(playertable)&&!is20(bottable)){
-                
+                //player is at exactly 20 so wins this round
+                //does nothing here as the player wins are added to somewhere after the following else if.
             }
             else if(isEnded&&!(BotStand)){
                 //add the all blue checker below
@@ -734,7 +736,7 @@ public class Bluejack{
             }
             else{
                 //both are over 20 so draw
-                System.out.println("Draw!");
+                System.out.println("Draw this round.");
             }
         }
         if(PlayerWins>BotWins){
@@ -933,74 +935,47 @@ public class Bluejack{
     }
 
     public static void gameHistoryRecorder(int PlayerWins, int BotWins, String PlayerName, String date, int Bluejack){
-        //isBlueJack=1 for player bluejack, 2 for bot bluejack, 0 for no bluejack.
-        String s="";
-        if(Bluejack==1){
-            s=PlayerName+": Bluejack (made a total of 20 by only using blue cards) - Computer: "+BotWins+", "+date;
-        }   
+        String record;
+        if (Bluejack==1){
+            record=PlayerName+": Bluejack (made a total of 20 by only using blue cards) - Computer: "+BotWins+", "+date;
+        }
         else if(Bluejack==0){
-            s=PlayerName+": "+PlayerWins+" - Computer: "+BotWins+", "+date;
+            record=PlayerName+": "+PlayerWins+" - Computer: "+BotWins+", "+date;
         }
         else if(Bluejack==2){
-            s=PlayerName+": "+PlayerWins+" - Computer: Bluejack (made a total of 20 by only using blue cards), "+date;
-        }
+            record=PlayerName+": "+PlayerWins+" - Computer: Bluejack (made a total of 20 by only using blue cards), "+date;
+        } 
         else{
-            System.out.println("There is an error somewhere to do with the calling of the gameHistoryRecorder function. You entered the Bluejack int value wrong somewhere in the code and should fix it.");
+            System.out.println("Invalid Bluejack value. Please enter 0, 1, or 2.");
             return;
         }
-        Scanner reader=null;
-        Formatter f=null;
+
         try {
-            reader=new Scanner(Paths.get("GameHistory.txt"));
-            int AmountOfGames=0;
-            while(reader.hasNextLine()){
-                AmountOfGames++;
+            Scanner reader=new Scanner(Paths.get("GameHistory.txt"));
+            String[] history=new String[10];
+            int count=0;
+            while (reader.hasNextLine()&&count<10){
+                history[count++]=reader.nextLine();
             }
-            if(AmountOfGames>0){
-                String[] t=new String[AmountOfGames];
-                for (int i = 0; i < t.length; i++) {
-                    t[i]=reader.nextLine();
-                }
-                if(t.length>=10){
-                    String[] a=new String[10];
-                    for (int i = 0; i < a.length-1; i++) {
-                        a[i]=t[i+1];
-                    }
-                    a[9]=s;
-                    String lastString="";
-                    for (int i = 0; i < a.length; i++) {
-                        lastString=lastString+a[i]+"\n";
-                    }
-                    f=new Formatter("GameHistory.txt");
-                    f.format(lastString);
-                }
-                else{
-                    String[] a=new String[t.length+1];
-                    for (int i = 0; i < t.length; i++) {
-                        a[i]=t[i];
-                    }
-                    a[a.length-1]=s;
-                    String lastString="";
-                    for (int i = 0; i < a.length; i++) {
-                        lastString=lastString+a[i]+"\n";
-                    }
-                    f=new Formatter("GameHistory.txt");
-                    f.format(lastString);
-                }
+            reader.close();
+
+            FileWriter fw=new FileWriter("GameHistory.txt");
+            Formatter formatter=new Formatter(fw);
+
+            int start;
+            if (count>=10) {
+                start=1;
+            } else {
+                start=0;
             }
-            else{
-                f=new Formatter("GameHistory.txt");
-                f.format(s);
+
+            for (int i = start; i < count; i++) {
+                formatter.format("%s\n", history[i]);
             }
+            formatter.format("%s\n", record);
+            formatter.close();
         } catch (Exception e) {
-            System.out.println("There was an issue in the gameHistoryRecorder function.\n"+e);
-        } finally{
-            if(reader!=null){
-                reader.close();
-            }
-            if(f!=null){
-                f.close();
-            }
+            System.out.println("An error occurred: "+ e);
         }
     }
 }
