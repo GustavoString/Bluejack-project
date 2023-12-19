@@ -338,6 +338,32 @@ public class Bluejack{
                                 break;
                             }
                         }
+                        boolean isPlayableCard=false;
+                        BotSum=sumCalculator(bottable);
+                        int PlayableCardValue=0;
+                        int PlayableCardIndex=0;
+                        for (int i = 0; i < botdeck.length; i++) {
+                            if(botdeck[i].CardType==1){
+                                if(botdeck[i].CardValue>PlayableCardValue&&botdeck[i].CardValue+BotSum<=20){
+                                    isPlayableCard=true;
+                                    PlayableCardValue=botdeck[i].CardValue;
+                                    PlayableCardIndex=i;
+                                }
+                            }
+                        }
+                        if(isPlayableCard&&BotSum>=12){
+                            bottable[cardsOnBotTable].CardColour=botdeck[PlayableCardIndex].CardColour;
+                            bottable[cardsOnBotTable].CardType=botdeck[PlayableCardIndex].CardType;
+                            bottable[cardsOnBotTable].CardValue=botdeck[PlayableCardIndex].CardValue;
+                            cardsOnBotTable++;
+                            botdeck[PlayableCardIndex].CardType=0;
+                            EndTurn=true;
+                            BotSum=sumCalculator(bottable);
+                            if(BotSum<=20||BotSum>=18){
+                                BotStand=true;
+                            }
+                            break;
+                        }
                         else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
                             //if there is a possibility of the sum going over 20 when a card is pulled but it can be corrected by playing a signed card.
                             //pulling a card from gamedeck
@@ -556,7 +582,7 @@ public class Bluejack{
                             EndTurn=true;
                             break;
                         }
-                        else if(BotSum<=10){
+                        else if(BotSum<=12){
                             //pull a card from the gamedeck here then see if it's possible for it to be made 20.
                             bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
                             bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
@@ -579,6 +605,30 @@ public class Bluejack{
                                 EndTurn=true;
                                 break;
                             }
+                        }
+                        //!!!!!!here add something that checks if there is a card in the bot hand that doesn't make it 20 but doesn't go over 20 when played.
+                        boolean isPlayableCard=false;
+                        BotSum=sumCalculator(bottable);
+                        int PlayableCardValue=0;
+                        int PlayableCardIndex=0;
+                        for (int i = 0; i < botdeck.length; i++) {
+                            if(botdeck[i].CardType==1){
+                                if(botdeck[i].CardValue>PlayableCardValue&&botdeck[i].CardValue+BotSum<=20){
+                                    isPlayableCard=true;
+                                    PlayableCardValue=botdeck[i].CardValue;
+                                    PlayableCardIndex=i;
+                                }
+                            }
+                        }
+                        if(isPlayableCard&&BotSum>=12){
+                            bottable[cardsOnBotTable].CardColour=botdeck[PlayableCardIndex].CardColour;
+                            bottable[cardsOnBotTable].CardType=botdeck[PlayableCardIndex].CardType;
+                            bottable[cardsOnBotTable].CardValue=botdeck[PlayableCardIndex].CardValue;
+                            cardsOnBotTable++;
+                            botdeck[PlayableCardIndex].CardType=0;
+                            EndTurn=true;
+                            BotStand=true;
+                            break;
                         }
                         else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
                             //if there is a possibility of the sum going over 20 when a card is pulled but it can be corrected by playing a signed card.
