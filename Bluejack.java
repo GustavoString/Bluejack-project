@@ -18,7 +18,7 @@ public class Bluejack{
         gamedeck=CardDeck.generateGameDeck();
         gamedeck=CardDeck.shuffle(gamedeck);
         //creating the player deck (hand)
-        //ge erating player deck after this point
+        //generating player deck after this point
         CardDeck[] playerdeck=new CardDeck[4];
         for (int i = 0; i < playerdeck.length; i++) {
             playerdeck[i]=new CardDeck();
@@ -242,8 +242,6 @@ public class Bluejack{
                         scan1.close();
                         return;
                     }
-                    //IMPORTANT!!! add in usage of x2 and +/- cards too. !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    //add the usage of +/- cards !!!!!!!!!!!!!!!!
                     boolean EndTurn=false;
                     if(BotStand) EndTurn=true;
                     //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
@@ -295,6 +293,7 @@ public class Bluejack{
                                 break;
                             }
                         }
+                        BotSum=sumCalculator(bottable);
                         if(is20){
                             //making the stack 20 as there is a card that makes it 20.
                             bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -309,13 +308,13 @@ public class Bluejack{
                         else if(IsDoubleCard&&bottable[cardsOnBotTable-1].CardValue+BotSum==20){
                             //checking to see if there is a double card and if there is, if it can make the total 20.
                             bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*2;
-                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            BotSum=sumCalculator(bottable);
                             botdeck[DoubleCardIndex].CardType=0;
                             BotStand=true;
                             EndTurn=true;
                             break;
                         }
-                        else if(BotSum<=10){
+                        else if(BotSum<=12){
                             //pull a card from the gamedeck here then see if it's possible for it to be made 20.
                             bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
                             bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
@@ -332,7 +331,7 @@ public class Bluejack{
                                     }
                                 }
                             }
-                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            BotSum=sumCalculator(bottable);
                             if(BotSum==20){
                                 BotStand=true;
                                 EndTurn=true;
@@ -418,7 +417,7 @@ public class Bluejack{
                                         }
                                     }
                                 }
-                                BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                                BotSum=sumCalculator(bottable);
                                 if(BotSum==20){
                                     BotStand=true;
                                     EndTurn=true;
@@ -536,6 +535,7 @@ public class Bluejack{
                                 break;
                             }
                         }
+                        BotSum=sumCalculator(bottable);
                         if(is20){
                             //making the stack 20 as there is a card that makes it 20.
                             bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -550,7 +550,7 @@ public class Bluejack{
                         else if(IsDoubleCard&&bottable[cardsOnBotTable-1].CardValue+BotSum==20){
                             //checking to see if there is a double card and if there is, if it can make the total 20.
                             bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*2;
-                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            BotSum=sumCalculator(bottable);
                             botdeck[DoubleCardIndex].CardType=0;
                             BotStand=true;
                             EndTurn=true;
@@ -573,7 +573,7 @@ public class Bluejack{
                                     }
                                 }
                             }
-                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            BotSum=sumCalculator(bottable);
                             if(BotSum==20){
                                 BotStand=true;
                                 EndTurn=true;
@@ -598,7 +598,7 @@ public class Bluejack{
                                     }
                                 }
                             }
-                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            BotSum=sumCalculator(bottable);
                             if(BotSum==20){
                             BotStand=true;
                             EndTurn=true;
