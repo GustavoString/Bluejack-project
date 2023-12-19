@@ -726,6 +726,7 @@ public class Bluejack{
                                 }
                             }
                         }
+                        gamePrinter(playerdeck, botdeck, bottable, playertable);
                     }
                     else if(playerinput==0){
                         isEnded=true;
