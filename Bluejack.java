@@ -491,6 +491,251 @@ public class Bluejack{
                             System.out.println("Something went wrong at the playerdeck switch.");
                             break;
                     }
+                    gamePrinter(playerdeck, botdeck, bottable, playertable);
+                    System.out.print("To stand enter 0, to end your turn enter 1:");
+                    playerinput=scan1.nextInt();
+                    if(playerinput==1){
+                        //bot plays here but player gets to play again as the player only ended the turn and did not stand.
+                        if(isAllBlueAnd20(playertable)){
+                            //player autowins game here
+                            System.out.println("Player Wins!");
+                            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 1);
+                            scan1.close();
+                            return;
+                        }
+                        boolean EndTurn=false;
+                        if(BotStand) EndTurn=true;
+                        //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
+                        //if the bot chooses to stand here don't forget to make BotStand=true
+                        while(!EndTurn){
+                            for (int i = 0; i < bottable.length; i++) {
+                                BotSum=BotSum+bottable[i].CardValue;
+                            }
+                            int MinCardValue=1000;
+                            int MinCardIndex=-1;
+                            int MaxCardValue=-1000;
+                            int MaxCardIndex=-1;
+                            boolean IsDoubleCard=false;
+                            boolean IsFlipCard=false;
+                            int FlipCardIndex=-1;
+                            int DoubleCardIndex=-1;
+                            for (int i = 0; i < botdeck.length; i++) {
+                                if(botdeck[i].CardType==1){
+                                    if(botdeck[i].CardValue<MinCardValue){
+                                        MinCardValue=botdeck[i].CardValue;
+                                        MinCardIndex=i;
+                                    }
+                                    if(botdeck[i].CardValue>MaxCardValue){
+                                        MaxCardValue=botdeck[i].CardValue;
+                                        MaxCardIndex=i;
+                                    }
+                                }
+                                if(botdeck[i].CardType==2){
+                                    IsFlipCard=true;
+                                    FlipCardIndex=i;
+                                }
+                                if(botdeck[i].CardType==3){
+                                    IsDoubleCard=true;
+                                    DoubleCardIndex=i;
+                                }
+                            }
+                            if(BotSum==20){
+                                EndTurn=true;
+                                BotStand=true;
+                                break;
+                            }
+                            boolean is20=false;
+                            int TwentyCardIndex=-1;
+                            //checking to see if any cards make the stack 20 in total.
+                            for (int i = 0; i < botdeck.length; i++) {
+                                if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
+                                    TwentyCardIndex=i;
+                                    is20=true;
+                                    break;
+                                }
+                            }
+                            BotSum=sumCalculator(bottable);
+                            if(is20){
+                                //making the stack 20 as there is a card that makes it 20.
+                                bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
+                                bottable[cardsOnBotTable].CardType=botdeck[TwentyCardIndex].CardType;
+                                bottable[cardsOnBotTable].CardValue=botdeck[TwentyCardIndex].CardValue;
+                                cardsOnBotTable++;
+                                botdeck[TwentyCardIndex].CardType=0;
+                                BotStand=true;
+                                EndTurn=true;
+                                break;
+                            }
+                            else if(IsDoubleCard&&bottable[cardsOnBotTable-1].CardValue+BotSum==20){
+                                //checking to see if there is a double card and if there is, if it can make the total 20.
+                                bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*2;
+                                BotSum=sumCalculator(bottable);
+                                botdeck[DoubleCardIndex].CardType=0;
+                                BotStand=true;
+                                EndTurn=true;
+                                break;
+                            }
+                            else if(BotSum<=12){
+                                //pull a card from the gamedeck here then see if it's possible for it to be made 20.
+                                bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                                bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                                bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                                cardsOnBotTable++;
+                                gamedeck[0].CardType=0;
+                                for (int l = 0; l < gamedeck.length; l++) {
+                                    for (int i = 0; i < gamedeck.length-1; i++) {
+                                        if(gamedeck[i].CardType==0){
+                                            gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                            gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                            gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                            gamedeck[i+1].CardType=0;
+                                        }
+                                    }
+                                }
+                                BotSum=sumCalculator(bottable);
+                                if(BotSum==20){
+                                    BotStand=true;
+                                    EndTurn=true;
+                                    break;
+                                }
+                            }
+                            boolean isPlayableCard=false;
+                            BotSum=sumCalculator(bottable);
+                            int PlayableCardValue=0;
+                            int PlayableCardIndex=0;
+                            for (int i = 0; i < botdeck.length; i++) {
+                                if(botdeck[i].CardType==1){
+                                    if(botdeck[i].CardValue>PlayableCardValue&&botdeck[i].CardValue+BotSum<=20){
+                                        isPlayableCard=true;
+                                        PlayableCardValue=botdeck[i].CardValue;
+                                        PlayableCardIndex=i;
+                                    }
+                                }
+                            }
+                            if(isPlayableCard&&BotSum>=12){
+                                bottable[cardsOnBotTable].CardColour=botdeck[PlayableCardIndex].CardColour;
+                                bottable[cardsOnBotTable].CardType=botdeck[PlayableCardIndex].CardType;
+                                bottable[cardsOnBotTable].CardValue=botdeck[PlayableCardIndex].CardValue;
+                                cardsOnBotTable++;
+                                botdeck[PlayableCardIndex].CardType=0;
+                                EndTurn=true;
+                                BotSum=sumCalculator(bottable);
+                                if(BotSum<=20||BotSum>=18){
+                                    BotStand=true;
+                                }
+                                break;
+                            }
+                            else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
+                                //if there is a possibility of the sum going over 20 when a card is pulled but it can be corrected by playing a signed card.
+                                //pulling a card from gamedeck
+                                bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                                bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                                bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                                cardsOnBotTable++;
+                                gamedeck[0].CardType=0;
+                                for (int l = 0; l < gamedeck.length; l++) {
+                                    for (int i = 0; i < gamedeck.length-1; i++) {
+                                        if(gamedeck[i].CardType==0){
+                                            gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                            gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                            gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                            gamedeck[i+1].CardType=0;
+                                        }
+                                    }
+                                }
+                                BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                                if(BotSum==20){
+                                    BotStand=true;
+                                    EndTurn=true;
+                                    break;
+                                }
+                                //checking to see if the sum is over 20 and playing the (-) value minimum card if it is
+                                if(BotSum>20){
+                                    bottable[cardsOnBotTable].CardColour=botdeck[MinCardIndex].CardColour;
+                                    bottable[cardsOnBotTable].CardType=botdeck[MinCardIndex].CardType;
+                                    bottable[cardsOnBotTable].CardValue=botdeck[MinCardIndex].CardValue;
+                                    cardsOnBotTable++;
+                                    botdeck[MinCardIndex].CardType=0;
+                                    EndTurn=true;
+                                    break;
+                                }
+                                else{
+                                    //checking to see if any cards make the stack 20 in total.
+                                    for (int i = 0; i < botdeck.length; i++) {
+                                        if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
+                                            TwentyCardIndex=i;
+                                            is20=true;
+                                            break;
+                                        }
+                                    }
+                                    if(is20){
+                                        //making the stack 20 as there is a card that makes it 20.
+                                        bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
+                                        bottable[cardsOnBotTable].CardType=botdeck[TwentyCardIndex].CardType;
+                                        bottable[cardsOnBotTable].CardValue=botdeck[TwentyCardIndex].CardValue;
+                                        cardsOnBotTable++;
+                                        botdeck[TwentyCardIndex].CardType=0;
+                                        BotStand=true;
+                                        EndTurn=true;
+                                    }
+                                    else{
+                                        EndTurn=true;
+                                        break;
+                                    }
+                                }
+                            }
+                            else{
+                                //check to see if there are any +/- cards and if anything can be done with them.
+                                //if not stand.
+                                if(IsFlipCard){
+                                    //pulling a card from gamedeck
+                                    bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                                    bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                                    bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                                    cardsOnBotTable++;
+                                    gamedeck[0].CardType=0;
+                                    for (int l = 0; l < gamedeck.length; l++) {
+                                        for (int i = 0; i < gamedeck.length-1; i++) {
+                                            if(gamedeck[i].CardType==0){
+                                                gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                                gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                                gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                                gamedeck[i+1].CardType=0;
+                                            }
+                                        }
+                                    }
+                                    BotSum=sumCalculator(bottable);
+                                    if(BotSum==20){
+                                        BotStand=true;
+                                        EndTurn=true;
+                                        break;
+                                    }
+                                    else if(BotSum>20){
+                                        bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*-1;
+                                        botdeck[FlipCardIndex].CardType=0;
+                                        BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                                        BotStand=true;
+                                        EndTurn=true;
+                                        break;
+                                    }
+                                }
+                                else{
+                                    BotStand=true;
+                                    EndTurn=true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if(playerinput==0){
+                        isEnded=true;
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid Input.");
+                        scan1.close();
+                        return;
+                    }
                 }
                 else System.out.println("Invalid input.");
             }
