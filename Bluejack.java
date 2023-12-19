@@ -1,5 +1,7 @@
 import java.io.FileWriter;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Formatter;
 import java.util.Random;
 import java.util.Scanner;
@@ -11,8 +13,6 @@ public class Bluejack{
         Scanner scan1=new Scanner(System.in);
         System.out.print("Please enter your name:");
         String PlayerName=scan1.nextLine();
-        System.out.print("Please enter the current date in the following format;\nDD.MM.YY(include the dots):");
-        String date=scan1.nextLine();
         //creating the game deck
         CardDeck[] gamedeck=new CardDeck[40];
         gamedeck=CardDeck.generateGameDeck();
@@ -238,7 +238,7 @@ public class Bluejack{
                     if(isAllBlueAnd20(playertable)){
                         //player autowins game here
                         System.out.println("Player Wins!");
-                        gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 1);
+                        gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 1);
                         scan1.close();
                         return;
                     }
@@ -477,7 +477,7 @@ public class Bluejack{
                 if(isAllBlueAnd20(playertable)){
                     //player autowins game here
                     System.out.println("Player Wins!");
-                    gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 1);
+                    gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 1);
                     scan1.close();
                     return;
                 }
@@ -682,17 +682,18 @@ public class Bluejack{
                     }
                 }
             }
+            gamePrinter(playerdeck, botdeck, bottable, playertable);
             if(isAllBlueAnd20(bottable)&&!isAllBlueAnd20(playertable)){
                 //bot autowins game here
                 System.out.println("Bot Wins!");
-                gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 2);
+                gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 2);
                 scan1.close();
                 return;
             }
             else if(isAllBlueAnd20(playertable)&&!isAllBlueAnd20(bottable)){
                 //player auto wins here
                 System.out.println("Player Wins!");
-                gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 1);
+                gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 1);
                 scan1.close();
                 return;
             }
@@ -742,17 +743,17 @@ public class Bluejack{
         if(PlayerWins>BotWins){
             //player wins here
             System.out.println("Player Wins!");
-            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 0);
+            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 0);
         }
         else if(PlayerWins<BotWins){
             //bot wins here
             System.out.println("Bot wins!");
-            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 0);
+            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 0);
         }
         else{
             //both sides draw here
             System.out.println("Draw!");
-            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, date, 0);
+            gameHistoryRecorder(PlayerWins, BotWins, PlayerName, 0);
         }
         scan1.close();
     }
@@ -934,8 +935,9 @@ public class Bluejack{
         return sum;
     }
 
-    public static void gameHistoryRecorder(int PlayerWins, int BotWins, String PlayerName, String date, int Bluejack){
+    public static void gameHistoryRecorder(int PlayerWins, int BotWins, String PlayerName, int Bluejack){
         String record;
+        String date=LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
         if (Bluejack==1){
             record=PlayerName+": Bluejack (made a total of 20 by only using blue cards) - Computer: "+BotWins+", "+date;
         }
