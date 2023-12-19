@@ -212,6 +212,7 @@ public class Bluejack{
                 }
                 System.out.print("\nTo end your turn enter 10.\nTo stand enter 0.\nTo pull a card from the deck to your board enter -1.\nOr to play one of the cards in your hand enter 1, 2, 3 or 4:");
                 int playerinput=scan1.nextInt();
+                System.out.println("\n\n");
                 if(playerinput==0){
                     isEnded=true;
                     break;
