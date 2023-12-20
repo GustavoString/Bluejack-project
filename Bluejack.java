@@ -478,11 +478,11 @@ public class Bluejack{
                             playerdeck[playerinput-1].CardType=0;
                             break;
                         case 2:
-                            playertable[cardsOnPlayerTable].CardValue=playertable[cardsOnPlayerTable].CardValue*-1;
+                            playertable[cardsOnPlayerTable-1].CardValue=playertable[cardsOnPlayerTable-1].CardValue*-1;
                             playerdeck[playerinput-1].CardType=0;
                             break;
                         case 3:
-                            playertable[cardsOnPlayerTable].CardValue=playertable[cardsOnPlayerTable].CardValue*2;
+                            playertable[cardsOnPlayerTable-1].CardValue=playertable[cardsOnPlayerTable-1].CardValue*2;
                             playerdeck[playerinput-1].CardType=0;
                             break;
                         case 0:
