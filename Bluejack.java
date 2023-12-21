@@ -172,7 +172,6 @@ public class Bluejack{
         int PlayerWins=0;
         int BotWins=0;
         for(int RoundCounter=0; RoundCounter<3; RoundCounter++){
-            //placing first card on player table
             for (int i = 0; i < playertable.length; i++) {
                 playertable[i].CardType=0;
             }
@@ -190,11 +189,8 @@ public class Bluejack{
             boolean isEnded=false;
             boolean BotStand=false;
             while(!(isEnded)){
-                //!!!!!At the end of the player turn add something that checks if the player reached exactly 20 ONLY using blue cards and make the player autowin if this is the case.
                 gamePrinter(playerdeck, botdeck, bottable, playertable);
-                for (int i = 0; i < playertable.length; i++) {
-                    PlayerSum=PlayerSum+playertable[i].CardValue;
-                }
+                PlayerSum=sumCalculator(playertable);
                 System.out.print("\nTo end your turn enter 10.\nTo stand enter 0.\nTo pull a card from the deck to your board enter -1.\nOr to play one of the cards in your hand enter 1, 2, 3 or 4:");
                 int playerinput=scan1.nextInt();
                 System.out.println("\n\n");
@@ -1275,6 +1271,7 @@ public class Bluejack{
     }
 
     public static void gameHistoryRecorder(int PlayerWins, int BotWins, String PlayerName, int Bluejack){
+        //1 for player bluejack, 2 for computer bluejack, 0 for no bluejack.
         String record;
         String date=LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
         if (Bluejack==1){
