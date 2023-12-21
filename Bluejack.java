@@ -176,42 +176,13 @@ public class Bluejack{
             for (int i = 0; i < playertable.length; i++) {
                 playertable[i].CardType=0;
             }
-            int cardsOnPlayerTable=0;
-            playertable[cardsOnPlayerTable].CardColour=gamedeck[0].CardColour;
-            playertable[cardsOnPlayerTable].CardType=gamedeck[0].CardType;
-            playertable[cardsOnPlayerTable].CardValue=gamedeck[0].CardValue;
-            cardsOnPlayerTable++;
-            gamedeck[0].CardType=0;
-            for (int l = 0; l < gamedeck.length; l++) {
-                for (int i = 0; i < gamedeck.length-1; i++) {
-                    if(gamedeck[i].CardType==0){
-                        gamedeck[i].CardType=gamedeck[i+1].CardType;
-                        gamedeck[i].CardColour=gamedeck[i+1].CardColour;
-                        gamedeck[i].CardValue=gamedeck[i+1].CardValue;
-                        gamedeck[i+1].CardType=0;
-                    }
-              }
-            }
-            //placing first card on bot table
             for (int i = 0; i < bottable.length; i++) {
                 bottable[i].CardType=0;
             }
+            int cardsOnPlayerTable=0;
+            
             int cardsOnBotTable=0;
-            bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
-            bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
-            bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
-            cardsOnBotTable++;
-            gamedeck[0].CardType=0;
-            for (int l = 0; l < gamedeck.length; l++) {
-                for (int i = 0; i < gamedeck.length-1; i++) {
-                    if(gamedeck[i].CardType==0){
-                        gamedeck[i].CardType=gamedeck[i+1].CardType;
-                        gamedeck[i].CardColour=gamedeck[i+1].CardColour;
-                        gamedeck[i].CardValue=gamedeck[i+1].CardValue;
-                        gamedeck[i+1].CardType=0;
-                    }
-                }
-            }
+            
             System.out.println("ROUND "+(RoundCounter+1)+":\n-----------------------------------------------");
             int PlayerSum=0;
             int BotSum=0;
@@ -309,6 +280,25 @@ public class Bluejack{
                             }
                         }
                         BotSum=sumCalculator(bottable);
+                        if(sumCalculator(bottable)==0){
+                            //pulling a card from the game deck as the table is empty.
+                            bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                            bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                            bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                            cardsOnBotTable++;
+                            gamedeck[0].CardType=0;
+                            for (int l = 0; l < gamedeck.length; l++) {
+                                for (int i = 0; i < gamedeck.length-1; i++) {
+                                    if(gamedeck[i].CardType==0){
+                                        gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                        gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                        gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                        gamedeck[i+1].CardType=0;
+                                    }
+                                }
+                            }
+                            BotSum=sumCalculator(bottable);
+                        }
                         if(is20){
                             //making the stack 20 as there is a card that makes it 20.
                             bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -570,6 +560,25 @@ public class Bluejack{
                                 }
                             }
                             BotSum=sumCalculator(bottable);
+                            if(sumCalculator(bottable)==0){
+                                //pulling a card from the game deck as the table is empty.
+                                bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                                bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                                bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                                cardsOnBotTable++;
+                                gamedeck[0].CardType=0;
+                                for (int l = 0; l < gamedeck.length; l++) {
+                                    for (int i = 0; i < gamedeck.length-1; i++) {
+                                        if(gamedeck[i].CardType==0){
+                                            gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                            gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                            gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                            gamedeck[i+1].CardType=0;
+                                        }
+                                    }
+                                }
+                                BotSum=sumCalculator(bottable);
+                            }
                             if(is20){
                                 //making the stack 20 as there is a card that makes it 20.
                                 bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -823,6 +832,25 @@ public class Bluejack{
                             }
                         }
                         BotSum=sumCalculator(bottable);
+                        if(sumCalculator(bottable)==0){
+                            //pulling a card from the game deck as the table is empty.
+                            bottable[cardsOnBotTable].CardColour=gamedeck[0].CardColour;
+                            bottable[cardsOnBotTable].CardType=gamedeck[0].CardType;
+                            bottable[cardsOnBotTable].CardValue=gamedeck[0].CardValue;
+                            cardsOnBotTable++;
+                            gamedeck[0].CardType=0;
+                            for (int l = 0; l < gamedeck.length; l++) {
+                                for (int i = 0; i < gamedeck.length-1; i++) {
+                                    if(gamedeck[i].CardType==0){
+                                        gamedeck[i].CardType=gamedeck[i+1].CardType;
+                                        gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                                        gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                                        gamedeck[i+1].CardType=0;
+                                    }
+                                }
+                            }
+                            BotSum=sumCalculator(bottable);
+                        }
                         if(is20){
                             //making the stack 20 as there is a card that makes it 20.
                             bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
