@@ -61,12 +61,18 @@ public class Bluejack{
                 else playerdeckUnchosen[i].CardValue=-1*valueRandom;
             }
         }
-        //selecting 4 cards at random from playerdeckunchosen
+        //selecting 4 cards at random from playerdeckUnchosen
+        int p=0;
         for(int u = 0; u < 4; u++){
             int randomSelector=r1.nextInt(10-u);
             playerdeck[u].CardColour=playerdeckUnchosen[randomSelector].CardColour;
             playerdeck[u].CardType=playerdeckUnchosen[randomSelector].CardType;
             playerdeck[u].CardValue=playerdeckUnchosen[randomSelector].CardValue;
+
+            if(randomSelector<=5-p){
+                gamedeck[randomSelector].CardType=0;
+                p++;
+            }
         
             //shift the remaining cards in playerdeckUnchosen
             for(int i=randomSelector; i<playerdeckUnchosen.length-1; i++){
@@ -125,11 +131,17 @@ public class Bluejack{
             }
         }
         //selecting 4 cards at random from botdeckUnchosen
+        p=0;
         for(int u = 0; u < 4; u++){
             int randomSelector=r1.nextInt(10-u);
             botdeck[u].CardColour=botdeckUnchosen[randomSelector].CardColour;
             botdeck[u].CardType=botdeckUnchosen[randomSelector].CardType;
             botdeck[u].CardValue=botdeckUnchosen[randomSelector].CardValue;
+
+            if(randomSelector<=5-p){
+                gamedeck[randomSelector].CardType=0;
+                p++;
+            }
         
             //shift the remaining cards in botdeckUnchosen
             for(int i=randomSelector; i<botdeckUnchosen.length-1; i++){
