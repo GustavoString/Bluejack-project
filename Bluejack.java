@@ -80,12 +80,14 @@ public class Bluejack{
             }
         }
         //shifting the cards in gamedeck if they are empty to avoid empty spaces in the deck
-        for (int i = 0; i < gamedeck.length-1; i++) {
-            if(gamedeck[i].CardType==0){
-                gamedeck[i].CardType=gamedeck[i+1].CardType;
-                gamedeck[i].CardColour=gamedeck[i+1].CardColour;
-                gamedeck[i].CardValue=gamedeck[i+1].CardValue;
-                gamedeck[i+1].CardType=0;
+        for (int l = 0; l < gamedeck.length; l++) {
+            for (int i = 0; i < gamedeck.length-1; i++) {
+                if(gamedeck[i].CardType==0){
+                    gamedeck[i].CardType=gamedeck[i+1].CardType;
+                    gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                    gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                    gamedeck[i+1].CardType=0;
+                }
             }
         }
         //creating bot deck
@@ -150,13 +152,13 @@ public class Bluejack{
         }
         for (int l = 0; l < gamedeck.length; l++) {
             for (int i = 0; i < gamedeck.length-1; i++) {
-            if(gamedeck[i].CardType==0){
-                gamedeck[i].CardType=gamedeck[i+1].CardType;
-                gamedeck[i].CardColour=gamedeck[i+1].CardColour;
-                gamedeck[i].CardValue=gamedeck[i+1].CardValue;
-                gamedeck[i+1].CardType=0;
+                if(gamedeck[i].CardType==0){
+                    gamedeck[i].CardType=gamedeck[i+1].CardType;
+                    gamedeck[i].CardColour=gamedeck[i+1].CardColour;
+                    gamedeck[i].CardValue=gamedeck[i+1].CardValue;
+                    gamedeck[i+1].CardType=0;
+                }
             }
-        }
         }
         //finished creating player hands at this point
         CardDeck[] playertable=new CardDeck[9];
