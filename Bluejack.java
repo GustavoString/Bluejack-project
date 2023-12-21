@@ -70,7 +70,7 @@ public class Bluejack{
             playerdeck[u].CardValue=playerdeckUnchosen[randomSelector].CardValue;
 
             if(randomSelector<=5-p){
-                gamedeck[randomSelector].CardType=0;
+                gamedeck[gamedeck.length-randomSelector-1].CardType=0;
                 p++;
             }
         
