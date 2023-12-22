@@ -760,11 +760,8 @@ public class Bluejack{
                 }
                 else System.out.println("Invalid input.");
             }
-            if(is20(playertable)&&!isAllBlueAnd20(playertable)&&!is20(bottable)){
-                //player is at exactly 20 so wins this round
-                //does nothing here as the player wins are added to somewhere after the following else if.
-            }
-            else if(isEnded&&!(BotStand)){
+            if(!(BotStand)){
+                isEnded=false;
                 //add the all blue checker below
                 if(isAllBlueAnd20(playertable)){
                     //player autowins game here
