@@ -909,7 +909,6 @@ public class Bluejack{
                             cardsOnBotTable++;
                             botdeck[PlayableCardIndex].CardType=0;
                             EndTurn=true;
-                            BotStand=true;
                             break;
                         }
                         else if(MinCardValue<0&&BotSum+MinCardValue<=10&&MinCardIndex!=-1){
@@ -1006,8 +1005,7 @@ public class Bluejack{
                                 break;
                             }
                         }
-                        else{
-                            BotStand=true;
+                        else {
                             EndTurn=true;
                             break;
                         }
