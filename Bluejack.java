@@ -460,7 +460,6 @@ public class Bluejack{
                                 }
                             }
                             else{
-                                BotStand=true;
                                 EndTurn=true;
                                 break;
                             }
@@ -741,7 +740,6 @@ public class Bluejack{
                                     }
                                 }
                                 else{
-                                    BotStand=true;
                                     EndTurn=true;
                                     break;
                                 }
