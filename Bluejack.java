@@ -1134,6 +1134,7 @@ public class Bluejack{
                 }
             }
         }
+        System.out.println("\nComputer sum: "+sumCalculator(bottable));
         System.out.println();
         //printing player table after this point
         System.out.print("Player Board:   ");
@@ -1173,6 +1174,7 @@ public class Bluejack{
                 }
             }
         }
+        System.out.println("\nPlayer sum: "+sumCalculator(playertable));
         System.out.println();
         //printing player hand after this point
         System.out.print("Player hand:  ");
