@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Bluejack{
 
     public static void main(String[] args) {
+        System.out.println("!!!!IMPORTANT!!!!\nPlease open an empty .txt file named 'GameHistory' in the same folder as the JAR file if you haven't already.");
         Random r1=new Random(System.currentTimeMillis());
         Scanner scan1=new Scanner(System.in);
         System.out.print("Please enter your name:");
