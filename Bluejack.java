@@ -228,10 +228,8 @@ public class Bluejack{
                     if(BotStand) EndTurn=true;
                     //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
                     //if the bot chooses to stand here don't forget to make BotStand=true
-                    while(!EndTurn){
-                        for (int i = 0; i < bottable.length; i++) {
-                            BotSum=BotSum+bottable[i].CardValue;
-                        }
+                    while(!EndTurn&&!BotStand){
+                        BotSum=sumCalculator(bottable);
                         int MinCardValue=1000;
                         int MinCardIndex=-1;
                         int MaxCardValue=-1000;
@@ -295,6 +293,7 @@ public class Bluejack{
                             }
                             BotSum=sumCalculator(bottable);
                         }
+                        BotSum=sumCalculator(bottable);
                         if(is20){
                             //making the stack 20 as there is a card that makes it 20.
                             bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -383,7 +382,7 @@ public class Bluejack{
                                     }
                                 }
                             }
-                            BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
+                            BotSum=sumCalculator(bottable);
                             if(BotSum==20){
                                 BotStand=true;
                                 EndTurn=true;
@@ -401,6 +400,7 @@ public class Bluejack{
                             }
                             else{
                                 //checking to see if any cards make the stack 20 in total.
+                                BotSum=sumCalculator(bottable);
                                 for (int i = 0; i < botdeck.length; i++) {
                                     if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
                                         TwentyCardIndex=i;
@@ -453,8 +453,7 @@ public class Bluejack{
                                 else if(BotSum>20){
                                     bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*-1;
                                     botdeck[FlipCardIndex].CardType=0;
-                                    BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
-                                    BotStand=true;
+                                    BotSum=sumCalculator(bottable);
                                     EndTurn=true;
                                     break;
                                 }
@@ -508,7 +507,7 @@ public class Bluejack{
                         if(BotStand) EndTurn=true;
                         //bot should play here but the player gets to play again once the bot is done as the player didn't stand.
                         //if the bot chooses to stand here don't forget to make BotStand=true
-                        while(!EndTurn){
+                        while(!EndTurn&&!BotStand){
                             for (int i = 0; i < bottable.length; i++) {
                                 BotSum=BotSum+bottable[i].CardValue;
                             }
@@ -575,6 +574,7 @@ public class Bluejack{
                                 }
                                 BotSum=sumCalculator(bottable);
                             }
+                            BotSum=sumCalculator(bottable);
                             if(is20){
                                 //making the stack 20 as there is a card that makes it 20.
                                 bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -681,6 +681,7 @@ public class Bluejack{
                                 }
                                 else{
                                     //checking to see if any cards make the stack 20 in total.
+                                    BotSum=sumCalculator(bottable);
                                     for (int i = 0; i < botdeck.length; i++) {
                                         if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
                                             TwentyCardIndex=i;
@@ -733,8 +734,7 @@ public class Bluejack{
                                     else if(BotSum>20){
                                         bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*-1;
                                         botdeck[FlipCardIndex].CardType=0;
-                                        BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
-                                        BotStand=true;
+                                        BotSum=sumCalculator(bottable);
                                         EndTurn=true;
                                         break;
                                     }
@@ -779,7 +779,7 @@ public class Bluejack{
                 if(BotStand) EndTurn=true;
                 //bot should play here but the player gets to play again once the bot is done as the player didn't stand.              
                 //if the bot chooses to stand here don't forget to make BotStand=true
-                    while(!EndTurn){
+                while(!EndTurn&&!BotStand){
                         gamePrinter(playerdeck, botdeck, bottable, playertable);
                         for (int i = 0; i < bottable.length; i++) {
                             BotSum=BotSum+bottable[i].CardValue;
@@ -847,6 +847,7 @@ public class Bluejack{
                             }
                             BotSum=sumCalculator(bottable);
                         }
+                        BotSum=sumCalculator(bottable);
                         if(is20){
                             //making the stack 20 as there is a card that makes it 20.
                             bottable[cardsOnBotTable].CardColour=botdeck[TwentyCardIndex].CardColour;
@@ -951,6 +952,7 @@ public class Bluejack{
                         }
                         else{
                             //checking to see if any cards make the stack 20 in total.
+                            BotSum=sumCalculator(bottable);
                             for (int i = 0; i < botdeck.length; i++) {
                                 if(botdeck[i].CardType==1&&botdeck[i].CardValue+BotSum==20){
                                     TwentyCardIndex=i;
@@ -1003,8 +1005,7 @@ public class Bluejack{
                             else if(BotSum>20){
                                 bottable[cardsOnBotTable-1].CardValue=bottable[cardsOnBotTable-1].CardValue*-1;
                                 botdeck[FlipCardIndex].CardType=0;
-                                BotSum=BotSum+bottable[cardsOnBotTable-1].CardValue;
-                                BotStand=true;
+                                BotSum=sumCalculator(bottable);
                                 EndTurn=true;
                                 break;
                             }
