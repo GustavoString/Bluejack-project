@@ -1006,8 +1006,23 @@ public class Bluejack{
                             }
                         }
                         else {
-                            EndTurn=true;
-                            break;
+                            isPlayableCard=false;
+                            BotSum=sumCalculator(bottable);
+                            PlayableCardValue=0;
+                            PlayableCardIndex=0;
+                            for (int i = 0; i < botdeck.length; i++) {
+                                if(botdeck[i].CardType==1){
+                                    if(botdeck[i].CardValue>PlayableCardValue&&botdeck[i].CardValue+BotSum<=20){
+                                        isPlayableCard=true;
+                                        PlayableCardValue=botdeck[i].CardValue;
+                                        PlayableCardIndex=i;
+                                    }
+                                }
+                            }
+                            if(!isPlayableCard){
+                                EndTurn=true;
+                                break;
+                            }
                         }
                     }
                 }
